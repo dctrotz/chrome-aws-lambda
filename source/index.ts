@@ -117,8 +117,6 @@ class Chromium {
       '--no-pings', // https://source.chromium.org/search?q=lang:cpp+symbol:kNoPings&ss=chromium
       '--no-sandbox', // https://source.chromium.org/search?q=lang:cpp+symbol:kNoSandbox&ss=chromium
       '--no-zygote', // https://source.chromium.org/search?q=lang:cpp+symbol:kNoZygote&ss=chromium
-      '--use-gl=angle', // https://chromium.googlesource.com/chromium/src/+/main/docs/gpu/swiftshader.md
-      '--use-angle=swiftshader', // https://chromium.googlesource.com/chromium/src/+/main/docs/gpu/swiftshader.md
       '--window-size=1920,1080', // https://source.chromium.org/search?q=lang:cpp+symbol:kWindowSize&ss=chromium
     ];
 
@@ -165,10 +163,7 @@ class Chromium {
     }
 
     const input = join(__dirname, '..', 'bin');
-    const promises = [
-      LambdaFS.inflate(`${input}/chromium.br`),
-      LambdaFS.inflate(`${input}/swiftshader.tar.br`),
-    ];
+    const promises = [LambdaFS.inflate(`${input}/chromium.br`)];
 
     if (/^AWS_Lambda_nodejs(?:10|12|14|16)[.]x$/.test(process.env.AWS_EXECUTION_ENV) === true) {
       promises.push(LambdaFS.inflate(`${input}/aws.tar.br`));
@@ -186,12 +181,7 @@ class Chromium {
       return false;
     }
 
-    const environments = [
-      'AWS_LAMBDA_FUNCTION_NAME',
-      'FUNCTION_NAME',
-      'FUNCTION_TARGET',
-      'FUNCTIONS_EMULATOR',
-    ];
+    const environments = ['AWS_LAMBDA_FUNCTION_NAME', 'FUNCTION_NAME', 'FUNCTION_TARGET', 'FUNCTIONS_EMULATOR'];
 
     return environments.some((key) => process.env[key] !== undefined);
   }
